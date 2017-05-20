@@ -10,6 +10,9 @@ namespace NumberClassifier
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Creating neural network...");
+            var neuralNetwork = new NeuralNetwork.NeuralNetwork(784, 100, 10, 0.1);
+            Console.ReadKey();
         }
     }
 }

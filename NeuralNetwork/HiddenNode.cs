@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork
 {
-    class HiddenNode
+    class HiddenNode : Node
     {
     }
 }
