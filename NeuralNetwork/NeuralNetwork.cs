@@ -1,4 +1,4 @@
-﻿namespace NeuralNetwork
+﻿namespace NeuralNetworks
 {
     using System;
     using System.Linq;
@@ -71,6 +71,25 @@
             }
             
             return answerIndex;
+        }
+
+        public void Train(List<TrainingItem> trainingSet)
+        {
+            if (trainingSet[0].Inputs.Count != this.inputNodes.Count ||
+                trainingSet[0].CorrectOutputs.Count != this.outputNodes.Count)
+            {
+                throw new ArgumentException($"The number of inputs and outputs does not match that of the neural network, there should be {this.inputNodes.Count} inputs and {this.outputNodes.Count} outputs.");
+            }
+
+            foreach(var trainingItem in trainingSet)
+            {
+                this.Query(trainingItem.Inputs);
+
+                for (var i = 0; i < trainingItem.CorrectOutputs.Count; i++)
+                {
+                    this.outputNodes[i].BackPropagateError(trainingItem.CorrectOutputs[i]);
+                }
+            }
         }
 
         private void CreateNodesInCollection(out List<Node> collection, int count)

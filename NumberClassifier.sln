@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberClassifier", "NumberClassifier\NumberClassifier.csproj", "{F0C3F30D-1C77-44DC-A129-263A1728DBAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetwork", "NeuralNetwork\NeuralNetwork.csproj", "{998902AE-2C53-4AEE-BF74-1EB1557FDD9B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetworks", "NeuralNetwork\NeuralNetworks.csproj", "{998902AE-2C53-4AEE-BF74-1EB1557FDD9B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndyTools", "..\Mp3Trimmer\AndyTools\AndyTools.csproj", "{9DDF3FAD-ADF7-4460-8D4F-025BC25F0386}"
 EndProject

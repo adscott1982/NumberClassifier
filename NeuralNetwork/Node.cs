@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace NeuralNetwork
+namespace NeuralNetworks
 {
     class Node
     {
