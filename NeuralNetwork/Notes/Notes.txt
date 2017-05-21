@@ -1,0 +1,4 @@
+﻿Notes:
+
+If a number was up at the top right of the image it would be focussed on inputs that were not usually involved. Should there be automated scaling of the inputs prior to 
+processing?

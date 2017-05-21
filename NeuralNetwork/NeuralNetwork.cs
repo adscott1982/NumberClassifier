@@ -27,50 +27,59 @@
             this.random = new Random(DateTime.Now.Millisecond * DateTime.Now.Minute);
             this.learningRate = learningRate;
 
-            // The order of the creation of the node layers is important, they must go from output to input
-            // so that the nodes are created ready for the connections from the preceding layer as they are
-            // created.
-            this.InitializeOutputNodes(outputNodeCount, startingOutputVariance);
-            this.InitializeHiddenNodes(hiddenNodeCount, startingOutputVariance);
-            this.InitializeInputNodes(inputNodeCount, startingOutputVariance);
+            this.CreateNodesInCollection(out this.inputNodes, inputNodeCount);
+            this.CreateNodesInCollection(out this.hiddenNodes, hiddenNodeCount);
+            this.CreateNodesInCollection(out this.outputNodes, outputNodeCount);
+
+            this.CreateLinksBetweenNodeLayers(this.inputNodes, this.hiddenNodes, startingOutputVariance);
+            this.CreateLinksBetweenNodeLayers(this.hiddenNodes, this.outputNodes, startingOutputVariance);
         }
 
-        public void Query(List<double> inputList)
+        private void CreateLinksBetweenNodeLayers(List<Node> firstNodeLayer, List<Node> secondNodeLayer, double startingOutputVariance)
+        {
+            foreach(var node in firstNodeLayer)
+            {
+                node.GenerateDownstreamLinks(secondNodeLayer, startingOutputVariance, this.random);
+            }
+        }
+
+        public int Query(List<double> inputList)
         {
             // Parallelize
+            // Put inputs into InputNodes, and cause them to generate outputs
             for (var i = 0; i < inputList.Count; i++)
             {
                 this.inputNodes[i].GenerateOutput(inputList[i]);
             }
-        }
 
-        private void InitializeInputNodes(int inputNodeCount, double startingOutputVariance)
-        {
-            this.inputNodes = new List<Node>();
-
-            for (var i = 0; i < inputNodeCount; i++)
+            // Hidden node process inputs - generate outputs
+            foreach (var hiddenNode in this.hiddenNodes)
             {
-                this.inputNodes.Add(new Node(this.hiddenNodes, 0.4d, this.random));
+                hiddenNode.GenerateOutput();
             }
-        }
 
-        private void InitializeHiddenNodes(int hiddenNodeCount, double startingOutputVariance)
-        {
-            this.hiddenNodes = new List<Node>();
+            // Get node index with correct value
+            int answerIndex = -1;
+            var currentMax = double.MinValue;
 
-            for (var i = 0; i < hiddenNodeCount; i++)
+            for (var i = 0; i < this.outputNodes.Count; i++)
             {
-                this.hiddenNodes.Add(new Node(this.outputNodes, 0.4d, this.random));
-            }
-        }
+                this.outputNodes[i].GenerateOutput();
 
-        private void InitializeOutputNodes(int outputNodeCount, double startingOutputVariance)
-        {
-            this.outputNodes = new List<Node>();
+                if (this.outputNodes[i].Output > currentMax)
+                    answerIndex = i;
+            }
             
-            for (var i = 0; i < outputNodeCount; i++)
+            return answerIndex;
+        }
+
+        private void CreateNodesInCollection(out List<Node> collection, int count)
+        {
+            collection = new List<Node>();
+
+            for (var i = 0; i < count; i++)
             {
-                this.outputNodes.Add(new Node(new List<Node>(), 0.0d, this.random));
+                collection.Add(new Node());
             }
         }
     }

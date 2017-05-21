@@ -13,6 +13,9 @@
             this.Origin = origin;
             this.Target = target;
             this.Weight = weight;
+
+            // Add link to target node's incoming link list
+            this.Target.AddInputLink(this);
         }
 
         /// <summary>
@@ -32,7 +35,7 @@
 
         public void Fire(double outputValue)
         {
-            // add input to target node
+            this.Target.Input(outputValue * this.Weight);
         }
 
         public void BackPropagateError(double error, double proportion)

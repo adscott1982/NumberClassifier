@@ -11,11 +11,14 @@ namespace NeuralNetwork
 
         private double inputSum;
 
-        public Node(List<Node> linkNodes, double strengthDeviation, Random random)
+        public Node()
         {
             this.outputLinks = new List<Link>();
             this.inputLinks = new List<Link>();
+        }
 
+        public void GenerateDownstreamLinks(List<Node> linkNodes, double strengthDeviation, Random random)
+        {
             foreach (Node node in linkNodes)
             {
                 var weight = random.NextDouble().Clamp(0.5 - strengthDeviation, 0.5 + strengthDeviation);
@@ -28,7 +31,20 @@ namespace NeuralNetwork
         /// </summary>
         public double Output { get; private set; }
 
-        public void AddInput(double input)
+        /// <summary>
+        /// Add a Link to the input links collection.
+        /// </summary>
+        /// <param name="link">The input link.</param>
+        public void AddInputLink(Link link)
+        {
+            this.inputLinks.Add(link);
+        }
+
+        /// <summary>
+        /// Add an input to the node.
+        /// </summary>
+        /// <param name="input"></param>
+        public void Input(double input)
         {
             this.inputSum += input;
         }
@@ -36,15 +52,15 @@ namespace NeuralNetwork
         /// <summary>
         /// Determine the sigma output value based on the sum of inputs, then output to all links.
         /// </summary>
-        public void GenerateOutput(double output = -100d)
+        public void GenerateOutput(double? output = null)
         {
             // If output was not passed as parameter, calculate based on sigma value
-            output = output == -100d ? 1 / (1 + Math.Exp(-this.inputSum)) : output;
+            this.Output = output.HasValue ? (double)output : 1 / (1 + Math.Exp(-this.inputSum));
             
             // Output to any links
             foreach(var link in this.outputLinks)
             {
-                link.Fire(output);
+                link.Fire(this.Output);
             }
 
             // Clear sum ready for next query
