@@ -14,7 +14,9 @@
             var neuralNetwork = new NeuralNetwork(784, 100, 10, 0.1, 0.4);
             Console.WriteLine("done.");
 
+            Console.Write("Loading training data... ");
             var trainingSet = LoadImageTrainingData(@"D:\Datasets\mnist_dataset\mnist_train_100.csv");
+            Console.WriteLine("done.");
 
             Console.WriteLine("Training neural network...");
             neuralNetwork.Train(trainingSet);

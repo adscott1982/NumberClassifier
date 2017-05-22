@@ -69,7 +69,21 @@ namespace NeuralNetworks
 
         public void BackPropagateError(double targetOutput)
         {
-            // Modify the weights of incoming links based on the error between the output and target output
+            var outputError = targetOutput - this.Output;
+
+            // Sum the total incoming link weights
+            var totalLinkWeight = 0d;
+            foreach(var link in this.inputLinks)
+            {
+                totalLinkWeight += link.Weight;
+            }
+
+            // Backpropagate the errors propertionally to the link weights
+            foreach(var link in this.inputLinks)
+            {
+                var proportion = link.Weight / totalLinkWeight;
+                link.BackPropagateError(outputError, proportion);
+            }
         }
     }
 }
