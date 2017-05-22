@@ -67,7 +67,11 @@
                 this.outputNodes[i].GenerateOutput();
 
                 if (this.outputNodes[i].Output > currentMax)
+                {
+                    currentMax = this.outputNodes[i].Output;
                     answerIndex = i;
+                }
+                    
             }
             
             return answerIndex;
@@ -83,11 +87,18 @@
 
             foreach(var trainingItem in trainingSet)
             {
+                Console.Write(".");
                 this.Query(trainingItem.Inputs);
 
                 for (var i = 0; i < trainingItem.CorrectOutputs.Count; i++)
                 {
-                    this.outputNodes[i].BackPropagateError(trainingItem.CorrectOutputs[i]);
+                    var outputError = trainingItem.CorrectOutputs[i] - this.outputNodes[i].Output;
+                    this.outputNodes[i].BackPropagateError(outputError);
+                }
+
+                foreach(var node in this.hiddenNodes)
+                {
+                    node.BackPropagateError();
                 }
             }
         }

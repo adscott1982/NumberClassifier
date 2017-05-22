@@ -11,5 +11,7 @@ namespace NeuralNetworks
         public List<double> Inputs { get; set; }
 
         public List<double> CorrectOutputs { get; set; }
+
+        public int CorrectNumber { get; set; }
     }
 }

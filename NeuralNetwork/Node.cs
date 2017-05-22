@@ -67,10 +67,8 @@ namespace NeuralNetworks
             this.inputSum = 0;
         }
 
-        public void BackPropagateError(double targetOutput)
+        public void BackPropagateError(double? outputError = null)
         {
-            var outputError = targetOutput - this.Output;
-
             // Sum the total incoming link weights
             var totalLinkWeight = 0d;
             foreach(var link in this.inputLinks)
@@ -78,11 +76,25 @@ namespace NeuralNetworks
                 totalLinkWeight += link.Weight;
             }
 
+            if (!outputError.HasValue)
+            {
+                outputError = 0;
+                foreach(var link in this.outputLinks)
+                {
+                    outputError += link.Error;
+                }
+            }
+
+            var totalError = outputError.Value;
+
+            // Squash total link weight with Sigmoid function
+            //totalLinkWeight = 1 / (1 + Math.Exp(-totalLinkWeight));
+
             // Backpropagate the errors propertionally to the link weights
-            foreach(var link in this.inputLinks)
+            foreach (var link in this.inputLinks)
             {
                 var proportion = link.Weight / totalLinkWeight;
-                link.BackPropagateError(outputError, proportion);
+                link.BackPropagateError(totalError * proportion);
             }
         }
     }

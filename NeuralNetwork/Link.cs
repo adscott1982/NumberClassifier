@@ -31,18 +31,24 @@
         /// <summary>
         /// The weight of the link - between 0.0 and 1.0.
         /// </summary>
-        public double Weight { get; }
+        public double Weight { get; private set; }
+
+        /// <summary>
+        /// The error generated from the target node.
+        /// </summary>
+        public double Error { get; private set; }
 
         public void Fire(double outputValue)
         {
             this.Target.Input(outputValue * this.Weight);
         }
 
-        public void BackPropagateError(double error, double proportion)
+        public void BackPropagateError(double error)
         {
-            // Update weight based on the error
+            this.Error = error;
 
-            // Update any upstream objects
+            // Update weight based on the error
+            this.Weight += error;
         }
     }
 }

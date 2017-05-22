@@ -15,12 +15,25 @@
             Console.WriteLine("done.");
 
             Console.Write("Loading training data... ");
-            var trainingSet = LoadImageTrainingData(@"D:\Datasets\mnist_dataset\mnist_train_100.csv");
+            var trainingSet = LoadImageTrainingData(@"D:\Datasets\mnist_dataset\mnist_train_700.csv");
             Console.WriteLine("done.");
 
             Console.WriteLine("Training neural network...");
             neuralNetwork.Train(trainingSet);
             Console.WriteLine("Finished training neural network.");
+
+            Console.Write("Loading test data... ");
+            var testSet = LoadImageTrainingData(@"D:\Datasets\mnist_dataset\mnist_test_10.csv");
+            Console.WriteLine("done.");
+
+            Console.WriteLine("Testing...");
+            foreach(var testItem in testSet)
+            {
+                var result = neuralNetwork.Query(testItem.Inputs);
+                var correctAnswer = testItem.CorrectNumber;
+
+                Console.WriteLine($"Expected: {correctAnswer}, Got: {result}");
+            }
 
             Console.ReadKey();
         }
@@ -51,7 +64,7 @@
                     outputList.Add(value);
                 }
 
-                trainingSet.Add(new TrainingItem { Inputs = inputList, CorrectOutputs = outputList });
+                trainingSet.Add(new TrainingItem { Inputs = inputList, CorrectOutputs = outputList, CorrectNumber = correctAnswer });
             }
 
             return trainingSet;
